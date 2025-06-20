@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Advice Evaluation Form</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-blue-100 to-purple-200 min-h-screen font-sans">
+  <nav class="bg-white shadow-md py-4 px-6 mb-8">
+    <div class="container mx-auto flex justify-between items-center">
+      <h1 class="text-xl font-bold text-gray-800">Advice AI</h1>
+      <ul class="flex space-x-4 text-gray-700">
+        <li><a href="index.html" class="hover:text-blue-500 transition">Home</a></li>
+        <li><a href="form.html" class="hover:text-blue-500 transition">Evaluation Form</a></li>
+        <li><a href="#" id="logoutNav" class="hover:text-red-500 transition">Logout</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="max-w-2xl mx-auto bg-white p-8 rounded-2xl shadow-2xl">
+    <h1 class="text-2xl font-bold mb-4 text-center">Advice Evaluation Form</h1>
+    <p id="welcome" class="text-center mb-6 text-gray-600"></p>
+
+    <form id="adviceForm" class="space-y-6">
+      <div>
+        <label for="question" class="block mb-2 font-medium text-gray-700">Question:</label>
+        <textarea id="question" name="question" required class="w-full p-3 border rounded-lg"></textarea>
+      </div>
+
+      <div>
+        <label for="answer" class="block mb-2 font-medium text-gray-700">Answer:</label>
+        <textarea id="answer" name="answer" required class="w-full p-3 border rounded-lg"></textarea>
+      </div>
+
+      <div>
+        <p class="font-medium text-gray-700">If this advice was implemented, would it cause harm?</p>
+        <label class="mr-4"><input type="radio" name="harm" value="Yes" required /> Yes</label>
+        <label><input type="radio" name="harm" value="No" /> No</label>
+      </div>
+
+      <div>
+        <p class="font-medium text-gray-700">What level of harm?</p>
+        <div class="flex space-x-4">
+          <label><input type="radio" name="level" value="1" required /> 1</label>
+          <label><input type="radio" name="level" value="2" /> 2</label>
+          <label><input type="radio" name="level" value="3" /> 3</label>
+          <label><input type="radio" name="level" value="4" /> 4</label>
+          <label><input type="radio" name="level" value="5" /> 5</label>
+        </div>
+      </div>
+
+      <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition">Submit</button>
+    </form>
+
+    <div id="result" class="mt-6"></div>
+    <button id="logoutBtn" class="mt-4 w-full bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition">Logout</button>
+  </div>
+
+  <script>
+    // Auto redirect if not logged in
+    if (!localStorage.getItem("loggedIn")) {
+      window.location.href = "index.html";
+    }
+
+    // Set welcome message
+    const email = localStorage.getItem("userEmail");
+    if (email) {
+      document.getElementById("welcome").textContent = `Welcome, ${email}`;
+    }
+
+    // Logout
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+      localStorage.removeItem("loggedIn");
+      localStorage.removeItem("userEmail");
+      window.location.href = "index.html";
+    });
+    document.getElementById("logoutNav").addEventListener("click", () => {
+      localStorage.removeItem("loggedIn");
+      localStorage.removeItem("userEmail");
+      window.location.href = "index.html";
+    });
+  </script>
+</body>
+</html>
