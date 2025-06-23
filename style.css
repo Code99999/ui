@@ -1,0 +1,17 @@
+/* Add custom styles here if needed */
+
+/* Example override: change body font */
+body {
+  font-family: 'Inter', sans-serif;
+}
+
+/* Example: Style textareas */
+textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* Example: Smooth transitions for buttons */
+button {
+  transition: all 0.2s ease-in-out;
+}
