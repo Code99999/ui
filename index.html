@@ -4,9 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Advice Platform - Login or Signup</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.tailwindcss.com"></script> <!-- Tailwind CSS -->
+  <link rel="stylesheet" href="style.css" /> <!-- Custom CSS -->
 </head>
 <body class="bg-gradient-to-br from-purple-200 to-blue-100 min-h-screen font-sans">
+
   <nav class="bg-white shadow-md py-4 px-6 mb-8">
     <div class="container mx-auto flex justify-between items-center">
       <h1 class="text-xl font-bold text-gray-800">SMALL SCALE TEST</h1>
@@ -23,13 +25,17 @@
       <h2 class="text-2xl font-bold mb-4 text-center">Login</h2>
       <form>
         <label class="block mb-2" for="loginEmail">Email:</label>
-        <input type="email" id="loginEmail" name="loginEmail" required class="w-full p-3 mb-4 border rounded-lg" />
+        <input type="email" id="loginEmail" required class="w-full p-3 mb-4 border rounded-lg" />
 
         <label class="block mb-2" for="loginPassword">Password:</label>
-        <input type="password" id="loginPassword" name="loginPassword" required class="w-full p-3 mb-4 border rounded-lg" />
+        <input type="password" id="loginPassword" required class="w-full p-3 mb-4 border rounded-lg" />
 
         <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">Login</button>
-        <p class="mt-4 text-center text-sm">Don't have an account? <a href="#" id="switchToSignup" class="text-blue-500 hover:underline">Sign Up</a></p>
+
+        <p class="mt-4 text-center text-sm">
+          Don't have an account?
+          <a href="#" id="switchToSignup" class="text-blue-500 hover:underline">Sign Up</a>
+        </p>
       </form>
     </div>
 
@@ -37,72 +43,7 @@
       <h2 class="text-2xl font-bold mb-4 text-center">Sign Up</h2>
       <form>
         <label class="block mb-2" for="signupEmail">Email:</label>
-        <input type="email" id="signupEmail" name="signupEmail" required class="w-full p-3 mb-4 border rounded-lg" />
+        <input type="email" id="signupEmail" required class="w-full p-3 mb-4 border rounded-lg" />
 
         <label class="block mb-2" for="signupPassword">Password:</label>
-        <input type="password" id="signupPassword" name="signupPassword" required class="w-full p-3 mb-4 border rounded-lg" />
-
-        <button type="submit" class="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition">Sign Up</button>
-        <p class="mt-4 text-center text-sm">Already have an account? <a href="#" id="switchToLogin" class="text-blue-500 hover:underline">Login</a></p>
-      </form>
-    </div>
-  </div>
-
-  <script>
-    const loginForm = document.getElementById('loginForm');
-    const signupForm = document.getElementById('signupForm');
-    const switchToSignup = document.getElementById('switchToSignup');
-    const switchToLogin = document.getElementById('switchToLogin');
-    const logoutNav = document.getElementById('logoutNav');
-
-    switchToSignup.addEventListener('click', e => {
-      e.preventDefault();
-      loginForm.classList.add('hidden');
-      signupForm.classList.remove('hidden');
-    });
-
-    switchToLogin.addEventListener('click', e => {
-      e.preventDefault();
-      signupForm.classList.add('hidden');
-      loginForm.classList.remove('hidden');
-    });
-
-    document.querySelector('#loginForm form').addEventListener('submit', e => {
-      e.preventDefault();
-      const email = document.getElementById('loginEmail').value;
-      const password = document.getElementById('loginPassword').value;
-      if (localStorage.getItem(`user_${email}`) === password) {
-        localStorage.setItem('loggedIn', 'true');
-        localStorage.setItem('userEmail', email);
-        window.location.href = 'form.html';
-      } else {
-        alert('Invalid login');
-      }
-    });
-
-    document.querySelector('#signupForm form').addEventListener('submit', e => {
-      e.preventDefault();
-      const email = document.getElementById('signupEmail').value;
-      const password = document.getElementById('signupPassword').value;
-      if (localStorage.getItem(`user_${email}`)) {
-        alert('Account already exists');
-      } else {
-        localStorage.setItem(`user_${email}`, password);
-        localStorage.setItem('loggedIn', 'true');
-        localStorage.setItem('userEmail', email);
-        window.location.href = 'form.html';
-      }
-    });
-
-    logoutNav.addEventListener('click', () => {
-      localStorage.removeItem('loggedIn');
-      localStorage.removeItem('userEmail');
-      window.location.reload();
-    });
-
-    if (localStorage.getItem('loggedIn')) {
-      window.location.href = 'form.html';
-    }
-  </script>
-</body>
-</html>
+        <input type="password" id="signupPassword" required class="w-full p-3
