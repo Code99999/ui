@@ -1,97 +1,73 @@
-// Redirect to login if not logged in
-if (!localStorage.getItem("loggedIn")) {
-  window.location.href = "index.html"; // Send to login page
-}
+document.addEventListener("DOMContentLoaded", () => {
+  const consentForm = document.getElementById("consent-form");
+  const ratingSection = document.getElementById("rating-section");
+  const consentSection = document.getElementById("consent-section");
+  const finishSection = document.getElementById("finish-section");
+  const ratingForm = document.getElementById("rating-form");
+  const finalSubmit = document.getElementById("submit-final");
 
-// Get stored email from localStorage
-const email = localStorage.getItem("userEmail");
+  const imageUrls = ["placeholder.jpg"]; // Add your actual image URLs
+  let currentImage = 0;
+  let results = [];
 
-// Display welcome message if email is present
-if (email) {
-  const welcomeElement = document.getElementById("welcome");
-  if (welcomeElement) {
-    welcomeElement.textContent = `Welcome, ${email}`;
+  // Check if already logged in
+  if (sessionStorage.getItem("consentGiven")) {
+    consentSection.classList.add("hidden");
+    ratingSection.classList.remove("hidden");
   }
-}
 
-// Handle logout button in form.html
-const logoutBtn = document.getElementById("logoutBtn");
-if (logoutBtn) {
-  logoutBtn.addEventListener("click", () => {
-    localStorage.removeItem("loggedIn"); // Clear login status
-    localStorage.removeItem("userEmail"); // Clear user email
-    window.location.href = "index.html"; // Redirect to login
+  consentForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    sessionStorage.setItem("consentGiven", "true");
+
+    // Save demographics
+    const formData = new FormData(consentForm);
+    sessionStorage.setItem("demographics", JSON.stringify(Object.fromEntries(formData)));
+
+    consentSection.classList.add("hidden");
+    ratingSection.classList.remove("hidden");
+    loadImage();
   });
-}
 
-// Handle logout link in nav
-const logoutNav = document.getElementById("logoutNav");
-if (logoutNav) {
-  logoutNav.addEventListener("click", () => {
-    localStorage.removeItem("loggedIn"); // Clear login status
-    localStorage.removeItem("userEmail"); // Clear user email
-    window.location.href = "index.html"; // Redirect to login
-  });
-}
-
-// Switch between login and signup forms
-const loginForm = document.getElementById('loginForm');
-const signupForm = document.getElementById('signupForm');
-const switchToSignup = document.getElementById('switchToSignup');
-const switchToLogin = document.getElementById('switchToLogin');
-
-if (switchToSignup) {
-  switchToSignup.addEventListener('click', e => {
-    e.preventDefault(); // Prevent default anchor behavior
-    loginForm.classList.add('hidden'); // Hide login form
-    signupForm.classList.remove('hidden'); // Show signup form
-  });
-}
-
-if (switchToLogin) {
-  switchToLogin.addEventListener('click', e => {
-    e.preventDefault(); // Prevent default anchor behavior
-    signupForm.classList.add('hidden'); // Hide signup form
-    loginForm.classList.remove('hidden'); // Show login form
-  });
-}
-
-// Login form submission handler
-const loginFormElement = loginForm?.querySelector('form');
-loginFormElement?.addEventListener('submit', e => {
-  e.preventDefault(); // Stop form from submitting
-
-  const email = document.getElementById('loginEmail').value;
-  const password = document.getElementById('loginPassword').value;
-
-  if (localStorage.getItem(`user_${email}`) === password) {
-    localStorage.setItem('loggedIn', 'true'); // Set login flag
-    localStorage.setItem('userEmail', email); // Save email
-    window.location.href = 'form.html'; // Redirect
-  } else {
-    alert('Invalid login'); // Show error
+  function loadImage() {
+    if (currentImage < 10) {
+      document.getElementById("rating-image").src = imageUrls[currentImage % imageUrls.length];
+    } else {
+      ratingSection.classList.add("hidden");
+      finishSection.classList.remove("hidden");
+    }
   }
+
+  ratingForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const formData = new FormData(ratingForm);
+    const entry = {
+      image: imageUrls[currentImage % imageUrls.length],
+      severity: formData.get("severity"),
+      types: formData.getAll("types"),
+      notes: formData.get("notes"),
+    };
+    results.push(entry);
+    ratingForm.reset();
+    currentImage++;
+    loadImage();
+  });
+
+  finalSubmit.addEventListener("click", () => {
+    const finalFeedback = document.querySelector("[name='final-feedback']").value;
+    const demographics = JSON.parse(sessionStorage.getItem("demographics"));
+    const submission = {
+      demographics,
+      ratings: results,
+      finalFeedback,
+      timestamp: new Date().toISOString(),
+    };
+
+    // 🔐 Replace this with actual backend or Firebase code
+    console.log("Submission Data:", submission);
+
+    alert("Your responses have been submitted. Thank you!");
+    sessionStorage.clear();
+    window.location.reload(); // Optional: Restart form
+  });
 });
-
-// Signup form submission handler
-const signupFormElement = signupForm?.querySelector('form');
-signupFormElement?.addEventListener('submit', e => {
-  e.preventDefault(); // Prevent form submission
-
-  const email = document.getElementById('signupEmail').value;
-  const password = document.getElementById('signupPassword').value;
-
-  if (localStorage.getItem(`user_${email}`)) {
-    alert('Account already exists'); // Check for duplicates
-  } else {
-    localStorage.setItem(`user_${email}`, password); // Save new user
-    localStorage.setItem('loggedIn', 'true'); // Set login flag
-    localStorage.setItem('userEmail', email); // Save email
-    window.location.href = 'form.html'; // Go to form
-  }
-});
-
-// Auto-redirect logged in users from login to form page
-if (window.location.pathname.includes("index.html") && localStorage.getItem("loggedIn")) {
-  window.location.href = "form.html";
-}
